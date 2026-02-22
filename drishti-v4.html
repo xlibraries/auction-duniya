@@ -260,6 +260,7 @@ html, body {
         <div class="media-head">
           <div class="mode-pill">Immersive Tour Enabled</div>
           <div class="head-actions">
+            <button class="btn" id="playBtn">Play</button>
             <button class="btn" id="fullscreenBtn">Fullscreen</button>
             <button class="btn" onclick="document.getElementById('fileIn').click()">Upload 360</button>
             <button class="btn" onclick="loadDemo()">Load Demo</button>
@@ -313,6 +314,9 @@ html, body {
 let viewer = null;
 let tourData = null;
 let currentId = null;
+let autoPlayTimer = null;
+const AUTO_PLAY_MS = 24000;
+const AUTO_ROTATE_SPEED = 15;
 
 const DEMO_TOUR = {
   property: { name: "2BHK · Koramangala", meta: "1,150 sq ft · Auction Mar 12" },
@@ -335,17 +339,10 @@ const DEMO_TOUR = {
     },
     bedroom: {
       title: "Bedroom",
-      panorama: "room.jpg",
+      panorama: "Myrpom.jpg",
       hotspots: [
         { pitch: -10, yaw: 60, toScene: "kitchen" },
-        { pitch: -10, yaw: 230, toScene: "bathroom" }
-      ]
-    },
-    bathroom: {
-      title: "Bathroom",
-      panorama: "Hall.jpg",
-      hotspots: [
-        { pitch: -10, yaw: 120, toScene: "bedroom" }
+        { pitch: -10, yaw: 240, toScene: "living" }
       ]
     }
   }
@@ -369,6 +366,7 @@ function buildScenes(tour) {
 }
 
 function launch(tour) {
+  stopAutoPlay();
   tourData = tour;
   const firstId = Object.keys(tour.scenes)[0];
   currentId = firstId;
@@ -397,6 +395,9 @@ function launch(tour) {
   viewer.on("scenechange", (id) => {
     currentId = id;
     syncUi();
+    if (autoPlayTimer) {
+      startSceneRotation();
+    }
   });
 
   viewer.on("load", () => {
@@ -405,6 +406,51 @@ function launch(tour) {
   });
 
   syncUi();
+}
+
+function setPlayButton(isPlaying) {
+  const btn = document.getElementById("playBtn");
+  btn.textContent = isPlaying ? "Pause" : "Play";
+}
+
+function startSceneRotation() {
+  if (!viewer || !viewer.startAutoRotate) return;
+  viewer.stopAutoRotate?.();
+  // Delay a bit so rotation starts after scene load/fade.
+  setTimeout(() => {
+    if (!autoPlayTimer || !viewer) return;
+    viewer.startAutoRotate(AUTO_ROTATE_SPEED);
+  }, 450);
+}
+
+function stopAutoPlay() {
+  if (autoPlayTimer) {
+    clearInterval(autoPlayTimer);
+    autoPlayTimer = null;
+  }
+  viewer?.stopAutoRotate?.();
+  setPlayButton(false);
+}
+
+function startAutoPlay() {
+  if (!tourData) return;
+  stopAutoPlay();
+  const count = Object.keys(tourData.scenes).length;
+  autoPlayTimer = setInterval(() => {
+    if (count > 1) {
+      nextScene();
+    }
+  }, AUTO_PLAY_MS);
+  setPlayButton(true);
+  startSceneRotation();
+}
+
+function toggleAutoPlay() {
+  if (autoPlayTimer) {
+    stopAutoPlay();
+  } else {
+    startAutoPlay();
+  }
 }
 
 function syncUi() {
@@ -482,6 +528,8 @@ function onFiles(e) {
 function loadDemo() {
   launch(DEMO_TOUR);
 }
+
+document.getElementById("playBtn").addEventListener("click", toggleAutoPlay);
 
 document.getElementById("fullscreenBtn").addEventListener("click", () => {
   if (!viewer) return;
