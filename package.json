@@ -1,8 +1,8 @@
 {
-  "name": "auction-duniya-immersive-viewer",
+  "name": "auction-duniya",
   "version": "1.0.0",
   "private": true,
-  "description": "AuctionDunia property page with immersive Pannellum viewer",
+  "description": "AuctionDunia",
   "scripts": {
     "start": "npx http-server . -p 5173 -c-1",
     "dev": "npm run start"
