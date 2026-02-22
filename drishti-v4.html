@@ -31,7 +31,7 @@ html, body {
   min-height: 100vh;
 }
 .top-nav {
-  height: 60px;
+  min-height: 60px;
   border-bottom: 1px solid var(--line);
   background: #fff;
   display: flex;
@@ -43,10 +43,53 @@ html, body {
   width: min(1180px, 100%);
   font-weight: 700;
   letter-spacing: .02em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 12px 0;
+}
+.menu-line {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #374151;
+  font-size: 14px;
+}
+.menu-line a {
+  color: inherit;
+  text-decoration: none;
+}
+.menu-line a:hover {
+  color: var(--brand);
+}
+.welcome {
+  color: #111827;
+  font-weight: 600;
+}
+.sub-nav {
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+.sub-nav-inner {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: #4b5563;
+}
+.sub-nav-inner span {
+  color: #111827;
+  font-weight: 600;
 }
 .content {
   width: min(1180px, 100%);
-  margin: 20px auto;
+  margin: 16px auto;
   padding: 0 16px 30px;
 }
 .breadcrumb {
@@ -63,6 +106,26 @@ html, body {
   color: var(--muted);
   font-size: 14px;
   margin-bottom: 18px;
+}
+.header-meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.badge {
+  border: 1px solid #c8f2ea;
+  background: #e8fffa;
+  color: #0f766e;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.mini-info {
+  font-size: 13px;
+  color: #4b5563;
 }
 .layout {
   display: grid;
@@ -221,6 +284,125 @@ html, body {
   line-height: 1.6;
   font-size: 14px;
 }
+.spec-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.spec-item {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  background: #fff;
+}
+.spec-item .k {
+  color: #6b7280;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+.spec-item .v {
+  color: #111827;
+  font-size: 14px;
+  font-weight: 600;
+}
+.map-box {
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #eef2f7;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4b5563;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.map-credit {
+  font-size: 12px;
+  color: #6b7280;
+}
+.auction-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  font-size: 14px;
+  padding: 8px 0;
+  border-top: 1px dashed #e5e7eb;
+}
+.auction-grid:first-child { border-top: none; }
+.auction-grid span:last-child { font-weight: 600; color: #111827; }
+.countdown {
+  margin-top: 8px;
+  border: 1px solid #d1fae5;
+  background: #ecfdf5;
+  color: #065f46;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.utility-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.help {
+  display: grid;
+  gap: 10px;
+}
+.help .btn {
+  text-align: center;
+  font-weight: 700;
+  border-color: #0f766e;
+  color: #0f766e;
+}
+.more-box {
+  text-align: center;
+}
+.footer {
+  margin-top: 24px;
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+.footer-inner {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 24px 16px;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr 1fr;
+  gap: 16px;
+}
+.footer h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.footer p, .footer li {
+  color: #4b5563;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.footer ul { list-style: none; }
+.footer-bottom {
+  border-top: 1px solid var(--line);
+  padding: 12px 16px;
+}
+.footer-bottom-inner {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: #6b7280;
+  font-size: 12px;
+}
+.policy-links {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 
 .pnlm-controls-container,
 .pnlm-title-box,
@@ -236,24 +418,52 @@ html, body {
 
 @media (max-width: 980px) {
   .layout { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 640px) {
   .content { margin-top: 12px; }
   #pano { min-height: 280px; }
   .meta { font-size: 13px; }
+  .spec-grid { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 <div class="page">
   <div class="top-nav">
-    <div class="brand">AuctionDunia</div>
+    <div class="brand">
+      <div style="font-weight:700;">Auction Dunia</div>
+      <div class="menu-line">
+        <a href="#">Home</a>
+        <a href="#">Properties</a>
+        <a href="#">Services</a>
+        <a href="#">Education</a>
+        <a href="#">Resources</a>
+      </div>
+      <div class="menu-line">
+        <span class="welcome">Welcome, Aman!</span>
+        <a href="#">Dashboard</a>
+        <a href="#">Logout</a>
+      </div>
+    </div>
+  </div>
+  <div class="sub-nav">
+    <div class="sub-nav-inner">
+      Home / Properties / <span>AD-433 Independent House</span>
+    </div>
   </div>
 
   <main class="content">
-    <div class="breadcrumb">Home / Properties / Bengaluru</div>
-    <h1 class="title">2BHK Apartment, Koramangala</h1>
-    <div class="meta">Auction Date: March 12, 2026 · Property ID: 364</div>
+    <div class="breadcrumb">Back to Properties</div>
+    <h1 class="title">AD-433 Independent House</h1>
+    <div class="header-meta">
+      <span class="badge">ACTIVE</span>
+      <span class="mini-info">AD-433</span>
+      <span class="mini-info">Basavangudi</span>
+      <span class="mini-info">Bank: Karnataka Bank Ltd</span>
+    </div>
+    <div class="meta">Market Price: 1.07 Cr · Reserve Price: 85.30 Lakhs · Auction Ends: 2/26/2026</div>
 
     <div class="layout">
       <section class="card">
@@ -286,28 +496,124 @@ html, body {
       </section>
 
       <aside class="card sidebar">
-        <div class="price">₹ 85,00,000</div>
-        <div class="price-note">Reserve price</div>
+        <div class="price">85.30 Lakhs</div>
+        <div class="price-note">Reserve Price</div>
 
-        <div class="kv"><span>Area</span><span>1,150 sq.ft</span></div>
-        <div class="kv"><span>Bedrooms</span><span>2</span></div>
-        <div class="kv"><span>Bathrooms</span><span>2</span></div>
-        <div class="kv"><span>Locality</span><span>Koramangala</span></div>
-        <div class="kv"><span>City</span><span>Bengaluru</span></div>
+        <div class="kv"><span>Market Price</span><span>1.07 Cr</span></div>
+        <div class="kv"><span>Auction Ends</span><span>2/26/2026</span></div>
+        <div class="kv"><span>Bank</span><span>Karnataka Bank Ltd</span></div>
+        <div class="kv"><span>EMD Amount</span><span>₹8.53 Lakhs</span></div>
+        <div class="kv"><span>EMD Date</span><span>25 February 2026</span></div>
 
-        <button class="cta">Bid In Auction</button>
-        <button class="cta secondary">Download Documents</button>
+        <div class="countdown">Auction Starts In: <span id="auctionCountdown">--</span></div>
+
+        <button class="cta">Save</button>
+        <button class="cta secondary">Share</button>
+
+        <section class="section" style="margin:14px -14px -14px;border-top:1px solid var(--line);">
+          <h2>Need Help?</h2>
+          <p style="margin-bottom:10px;">Have questions about this property or the auction process?</p>
+          <div class="help">
+            <a class="btn" href="tel:7019773792">Call Us (7019773792)</a>
+            <a class="btn" href="mailto:info@auctiondunia.com">Email Us (info@auctiondunia.com)</a>
+          </div>
+        </section>
       </aside>
     </div>
 
     <section class="card section">
-      <h2>Property Description</h2>
+      <h2>About This Property</h2>
       <p>
-        This layout keeps the property detail UI simple, while replacing a static photo carousel with your immersive 360 room navigation.
-        Use room chips or hotspot points inside the viewer to move between spaces.
+        Configuration: NA. Facing: East. Water Facility: BWSSB. Legal Clearance: Yes. Possession: Symbolic.
+        Encumbrance: Nil. Katha: A Katha.
       </p>
     </section>
+
+    <section class="card section">
+      <h2>Property Details</h2>
+      <div class="spec-grid">
+        <div class="spec-item"><div class="k">Property Type</div><div class="v">Independent House</div></div>
+        <div class="spec-item"><div class="k">Possession Status</div><div class="v">Symbolic</div></div>
+        <div class="spec-item"><div class="k">Size</div><div class="v">654.00 sq ft</div></div>
+        <div class="spec-item"><div class="k">Year Built</div><div class="v">2013</div></div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h2>Amenities</h2>
+      <p>No amenities listed.</p>
+    </section>
+
+    <section class="card section">
+      <h2>Location & Nearby</h2>
+      <div class="map-box">Map Placeholder (+ / -)</div>
+      <div class="map-credit">Leaflet | © OpenStreetMap contributors</div>
+      <h2 style="margin-top:12px;">Nearby Facilities</h2>
+      <p>No nearby facilities listed.</p>
+    </section>
+
+    <section class="card section">
+      <h2>Auction Details</h2>
+      <div class="auction-grid"><span>Market Price:</span><span>1.07 Cr</span></div>
+      <div class="auction-grid"><span>Reserve Price:</span><span>85.30 Lakhs</span></div>
+      <div class="auction-grid"><span>EMD Amount:</span><span>₹8.53 Lakhs</span></div>
+      <div class="auction-grid"><span>EMD Date:</span><span>25 February 2026</span></div>
+      <div class="auction-grid"><span>Auction Start:</span><span>2/26/2026</span></div>
+      <div class="auction-grid"><span>Auction End:</span><span>2/26/2026</span></div>
+    </section>
+
+    <section class="card section more-box">
+      <h2>More Properties</h2>
+      <p style="margin-bottom:12px;">No other properties found in Basavangudi by Karnataka Bank Ltd.</p>
+      <button class="btn">View All Properties</button>
+    </section>
   </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <h3>Auction Dunia</h3>
+        <p>Your guide to buying bank-repossessed properties in India. We provide education and resources to help you navigate the SARFAESI auction process.</p>
+      </div>
+      <div>
+        <h3>Quick Links</h3>
+        <ul>
+          <li>Home</li>
+          <li>Properties</li>
+          <li>Education</li>
+          <li>About Us</li>
+          <li>FAQ</li>
+          <li>Contact Us</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Our Services</h3>
+        <ul>
+          <li>Document Procurement</li>
+          <li>Registration & Compliance Support</li>
+          <li>Legal Drafting & Review</li>
+          <li>Khata, Utility & Tax Services</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Contact Us</h3>
+        <p>No 26, Prestige Cube, Laskar Hosur Road, Adugodi, Bengaluru - 560030</p>
+        <p>7019773792</p>
+        <p>info@auctiondunia.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <div>© 2026 Auction Dunia. All Rights Reserved. Powered-By Delphin Digital</div>
+        <div class="policy-links">
+          <span>Terms of Service</span>
+          <span>Privacy Policy</span>
+          <span>Disclaimer Policy</span>
+          <span>Refund Policy</span>
+        </div>
+      </div>
+    </div>
+  </footer>
 </div>
 
 <script>
@@ -540,6 +846,28 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowRight") nextScene();
   if (e.key === "ArrowLeft") prevScene();
 });
+
+function updateAuctionCountdown() {
+  const end = new Date("2026-02-26T23:59:59+05:30").getTime();
+  const now = Date.now();
+  const diff = end - now;
+  const node = document.getElementById("auctionCountdown");
+  if (!node) return;
+
+  if (diff <= 0) {
+    node.textContent = "Auction started";
+    return;
+  }
+
+  const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const m = Math.floor((diff / (1000 * 60)) % 60);
+  const s = Math.floor((diff / 1000) % 60);
+  node.textContent = `${d}d ${h}h ${m}m ${s}s`;
+}
+
+setInterval(updateAuctionCountdown, 1000);
+updateAuctionCountdown();
 
 loadDemo();
 </script>
