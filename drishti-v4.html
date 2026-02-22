@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>Drishti</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+<script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0d0c0e;
+  --gold: #b89a5a;
+  --gold-glow: rgba(184,154,90,0.35);
+  --cream: #ede8df;
+  --muted: rgba(237,232,223,0.38);
+  --glass: rgba(13,12,14,0.72);
+  --border: rgba(184,154,90,0.18);
+}
+
+html, body { width: 100%; height: 100%; overflow: hidden; background: var(--ink); font-family: 'DM Sans', sans-serif; color: var(--cream); }
+
+/* ── PANNELLUM CONTAINER ── */
+#pano { position: fixed; inset: 0; }
+
+/* Kill all default pannellum UI chrome */
+.pnlm-controls-container,
+.pnlm-title-box,
+.pnlm-load-button,
+.pnlm-orientation-button { display: none !important; }
+
+/* ── ROOM TRANSITION VEIL ── */
+#veil {
+  position: fixed; inset: 0; z-index: 80;
+  background: var(--ink);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0s;
+}
+#veil.closing { opacity: 1; transition: opacity 0.28s cubic-bezier(0.4,0,1,1); }
+#veil.opening { opacity: 0; transition: opacity 0.45s cubic-bezier(0,0,0.2,1); }
+
+/* ── TOP BAR ── */
+#topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: 62px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  background: linear-gradient(180deg, rgba(13,12,14,.9) 0%, transparent 100%);
+  z-index: 60; pointer-events: none;
+  opacity: 0; transform: translateY(-8px);
+  transition: opacity .6s, transform .6s;
+}
+#topbar.show { opacity: 1; transform: translateY(0); pointer-events: all; }
+
+.wordmark {
+  display: flex; align-items: center; gap: 10px;
+}
+.wm-icon {
+  width: 30px; height: 30px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  display: grid; place-items: center;
+  position: relative;
+}
+.wm-icon::after {
+  content: '';
+  width: 8px; height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--gold-glow);
+}
+.wm-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-weight: 300;
+  letter-spacing: .2em;
+  color: var(--cream);
+}
+
+.room-label-wrap { text-align: center; }
+#roomLabel {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; font-weight: 300; font-style: italic;
+  letter-spacing: .04em; color: var(--cream);
+  transition: opacity .3s;
+}
+.prop-meta {
+  font-size: 9px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--muted); margin-top: 3px;
+}
+
+.top-actions { display: flex; gap: 8px; }
+.act-btn {
+  background: var(--glass); border: 1px solid var(--border);
+  color: var(--cream); font-family: 'DM Sans', sans-serif;
+  font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+  padding: 7px 15px; border-radius: 1px; cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition: border-color .2s, color .2s, background .2s;
+}
+.act-btn:hover { border-color: var(--gold); color: var(--gold); background: rgba(184,154,90,.06); }
+
+/* ── BOTTOM ROOM MAP ── */
+#roommap {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 4px;
+  background: var(--glass); border: 1px solid var(--border);
+  padding: 7px 14px; border-radius: 1px;
+  backdrop-filter: blur(16px); z-index: 60;
+  max-width: 90vw; overflow-x: auto;
+  opacity: 0; transform: translateX(-50%) translateY(10px);
+  transition: opacity .6s .2s, transform .6s .2s;
+}
+#roommap.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.rm-chip {
+  font-size: 9px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); padding: 5px 13px; border-radius: 1px; white-space: nowrap;
+  cursor: pointer; border: 1px solid transparent;
+  transition: color .2s, border-color .2s, background .2s;
+}
+.rm-chip:hover { color: var(--cream); border-color: var(--border); }
+.rm-chip.active { color: var(--gold); border-color: var(--gold); background: rgba(184,154,90,.07); }
+.rm-div { width: 1px; height: 12px; background: var(--border); flex-shrink: 0; }
+
+/* ── CUSTOM HOTSPOTS ── */
+.hs-wrap {
+  position: relative;
+  width: 56px; height: 56px;
+  display: grid; place-items: center;
+  cursor: pointer;
+}
+
+/* Ripple rings */
+.hs-ring {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(184,154,90,.5);
+  animation: hsRipple 2.4s ease-out infinite;
+}
+.hs-ring:nth-child(2) { animation-delay: .8s; }
+.hs-ring:nth-child(3) { animation-delay: 1.6s; }
+
+@keyframes hsRipple {
+  0%   { transform: scale(.4); opacity: .8; }
+  100% { transform: scale(1.1); opacity: 0; }
+}
+
+/* Core dot */
+.hs-core {
+  width: 14px; height: 14px;
+  background: var(--gold);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(184,154,90,.2), 0 0 20px var(--gold-glow);
+  transition: transform .2s, box-shadow .2s;
+  position: relative; z-index: 2;
+}
+.hs-wrap:hover .hs-core {
+  transform: scale(1.3);
+  box-shadow: 0 0 0 5px rgba(184,154,90,.25), 0 0 30px rgba(184,154,90,.6);
+}
+
+/* Label that appears on hover */
+.hs-label {
+  position: absolute;
+  bottom: -26px; left: 50%; transform: translateX(-50%);
+  font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gold); white-space: nowrap;
+  opacity: 0; transition: opacity .2s;
+  pointer-events: none;
+  text-shadow: 0 1px 8px var(--ink);
+}
+.hs-wrap:hover .hs-label { opacity: 1; }
+
+/* Override pannellum hotspot base to be invisible — we use custom HTML */
+.pnlm-hotspot { background: transparent !important; border: none !important; width: 56px !important; height: 56px !important; }
+.pnlm-hotspot:hover { background: transparent !important; }
+
+/* ── DRAG HINT ── */
+#hint {
+  position: fixed; bottom: 74px; left: 50%; transform: translateX(-50%);
+  font-size: 9px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--muted); display: flex; align-items: center; gap: 10px;
+  z-index: 60; pointer-events: none;
+  opacity: 1; transition: opacity .8s;
+}
+#hint.gone { opacity: 0; }
+.hint-icon { font-size: 13px; animation: hintSway 2s ease-in-out infinite; }
+@keyframes hintSway { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
+
+/* ── LOADING STATE ── */
+#loadscreen {
+  position: fixed; inset: 0; background: var(--ink); z-index: 200;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 28px; transition: opacity .9s;
+}
+#loadscreen.out { opacity: 0; pointer-events: none; }
+.ls-title { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 300; letter-spacing: .2em; color: var(--cream); }
+.ls-sub { font-size: 9px; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
+.ls-bar { width: 120px; height: 1px; background: var(--border); position: relative; overflow: hidden; }
+.ls-bar::after { content: ''; position: absolute; left: -100%; width: 100%; height: 100%; background: var(--gold); animation: lsSlide 1.6s ease-in-out infinite; }
+@keyframes lsSlide { 0%{left:-100%;} 100%{left:100%;} }
+
+/* ── UPLOAD SCREEN ── */
+#upscreen {
+  position: fixed; inset: 0; background: var(--ink); z-index: 150;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 20px; transition: opacity .5s;
+}
+#upscreen.out { opacity: 0; pointer-events: none; }
+.us-title { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 300; letter-spacing: .08em; text-align: center; line-height: 1.25; }
+.us-sub { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); text-align: center; line-height: 2.2; max-width: 320px; }
+.us-upload {
+  border: 1px solid var(--gold); color: var(--gold); background: transparent;
+  font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+  padding: 13px 38px; cursor: pointer; transition: background .2s;
+}
+.us-upload:hover { background: rgba(184,154,90,.1); }
+.us-demo {
+  border: 1px solid var(--border); color: var(--muted); background: transparent;
+  font-family: 'DM Sans', sans-serif; font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
+  padding: 9px 26px; cursor: pointer; transition: all .2s;
+}
+.us-demo:hover { border-color: rgba(184,154,90,.4); color: var(--cream); }
+.us-note { font-size: 9px; color: var(--muted); letter-spacing: .1em; text-align: center; line-height: 1.8; }
+
+/* ── GRAIN OVERLAY for depth ── */
+#grain {
+  position: fixed; inset: 0; z-index: 55; pointer-events: none;
+  opacity: .035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px;
+}
+
+/* ── VIGNETTE for depth ── */
+#vig {
+  position: fixed; inset: 0; z-index: 54; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(13,12,14,.55) 100%);
+}
+</style>
+</head>
+<body>
+
+<!-- Depth layers -->
+<div id="grain"></div>
+<div id="vig"></div>
+
+<!-- Transition veil -->
+<div id="veil"></div>
+
+<!-- Load screen -->
+<div id="loadscreen">
+  <div class="ls-title">Drishti</div>
+  <div class="ls-sub">Property Intelligence</div>
+  <div class="ls-bar"></div>
+</div>
+
+<!-- Upload screen -->
+<div id="upscreen">
+  <div class="us-title">Immersive<br>Property Tour</div>
+  <div class="us-sub">
+    Shoot Photo Sphere in each room<br>
+    Upload all images at once
+  </div>
+  <button class="us-upload" onclick="document.getElementById('fileIn').click()">
+    Upload Photo Spheres
+  </button>
+  <button class="us-demo" onclick="loadDemo()">View Demo Tour</button>
+  <input type="file" id="fileIn" accept="image/*" multiple style="display:none" onchange="onFiles(event)"/>
+  <div class="us-note">
+    Android: Google Camera → More → Photo Sphere<br>
+    One image per room · Equirectangular JPG
+  </div>
+</div>
+
+<!-- Pannellum -->
+<div id="pano"></div>
+
+<!-- HUD (only shown after tour loads) -->
+<div id="topbar">
+  <div class="wordmark">
+    <div class="wm-icon"></div>
+    <span class="wm-text">DRISHTI</span>
+  </div>
+  <div class="room-label-wrap">
+    <div id="roomLabel">—</div>
+    <div class="prop-meta" id="propMeta"></div>
+  </div>
+  <div class="top-actions">
+    <button class="act-btn" onclick="viewer?.toggleFullscreen()">Fullscreen</button>
+  </div>
+</div>
+
+<div id="roommap"></div>
+<div id="hint"><span class="hint-icon">⟳</span> drag to explore</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+let viewer = null;
+let tourData = null;
+let currentId = null;
+let transitioning = false;
+
+// ── Demo tour (uses free equirectangular images) ──────────
+const DEMO_TOUR = {
+  property: { name: "2BHK · Koramangala", meta: "1,150 sq ft  ·  Auction Mar 12" },
+  scenes: {
+    living: {
+      title: "Living Room",
+      panorama: "https://pannellum.org/images/from-tree.jpg",
+      hotspots: [
+        { pitch: -12, yaw: 110, toScene: "kitchen",  label: "Kitchen →"  },
+        { pitch: -12, yaw: 260, toScene: "bedroom",  label: "Bedroom →"  },
+      ]
+    },
+    kitchen: {
+      title: "Kitchen",
+      panorama: "https://pannellum.org/images/bma-0.jpg",
+      hotspots: [
+        { pitch: -12, yaw: 20,  toScene: "living",   label: "← Living"   },
+        { pitch: -12, yaw: 190, toScene: "bedroom",  label: "Bedroom →"  },
+      ]
+    },
+    bedroom: {
+      title: "Master Bedroom",
+      panorama: "https://pannellum.org/images/bma-1.jpg",
+      hotspots: [
+        { pitch: -12, yaw: 60,  toScene: "kitchen",  label: "← Kitchen"  },
+        { pitch: -12, yaw: 230, toScene: "bathroom", label: "Bathroom →" },
+      ]
+    },
+    bathroom: {
+      title: "Bathroom",
+      panorama: "https://pannellum.org/images/alma.jpg",
+      hotspots: [
+        { pitch: -12, yaw: 110, toScene: "bedroom",  label: "← Bedroom"  },
+      ]
+    }
+  }
+};
+
+// ── Build pannellum scene config ──────────────────────────
+function buildScenes(tour) {
+  const out = {};
+  Object.entries(tour.scenes).forEach(([id, s]) => {
+    out[id] = {
+      type:      "equirectangular",
+      panorama:  s.panorama,
+      hotSpots:  (s.hotspots || []).map(hs => ({
+        pitch: hs.pitch,
+        yaw:   hs.yaw,
+        type:  "custom",
+        cssClass: "pnlm-hotspot",
+        createTooltipFunc: createHotspotEl,
+        createTooltipArgs: { label: hs.label, toScene: hs.toScene },
+      })),
+    };
+  });
+  return out;
+}
+
+// ── Custom hotspot element ────────────────────────────────
+function createHotspotEl(container, args) {
+  container.innerHTML = `
+    <div class="hs-wrap">
+      <div class="hs-ring"></div>
+      <div class="hs-ring"></div>
+      <div class="hs-ring"></div>
+      <div class="hs-core"></div>
+      <div class="hs-label">${args.label}</div>
+    </div>`;
+  container.querySelector('.hs-wrap').addEventListener('click', (e) => {
+    e.stopPropagation();
+    goToScene(args.toScene);
+  });
+}
+
+// ── Cinematic scene transition ────────────────────────────
+function goToScene(id) {
+  if (transitioning || id === currentId) return;
+  transitioning = true;
+
+  const veil = document.getElementById('veil');
+
+  // Fade out
+  veil.classList.add('closing');
+  setTimeout(() => {
+    viewer.loadScene(id);
+    // Brief hold at black
+    setTimeout(() => {
+      veil.classList.remove('closing');
+      veil.classList.add('opening');
+      setTimeout(() => {
+        veil.classList.remove('opening');
+        transitioning = false;
+      }, 500);
+    }, 120);
+  }, 280);
+}
+
+// ── Launch viewer ─────────────────────────────────────────
+function launch(tour) {
+  tourData = tour;
+  document.getElementById('upscreen').classList.add('out');
+
+  const firstId = Object.keys(tour.scenes)[0];
+  currentId = firstId;
+
+  viewer = pannellum.viewer('pano', {
+    default: {
+      firstScene:        firstId,
+      autoLoad:          true,
+      showZoomCtrl:      false,
+      showFullscreenCtrl: false,
+      keyboardZoom:      false,
+      mouseZoom:         true,
+      // ── These three settings fix the "stiff" feel ──
+      hfov:              95,          // wider FOV = more immersive
+      friction:          0.5,         // 0=ice, 1=sticky. 0.5 = natural inertia
+      autoRotate:        0,
+      sceneFadeDuration: 1,           // we handle our own fade, keep pannellum's instant
+    },
+    scenes: buildScenes(tour),
+  });
+
+  // Sync HUD on scene change
+  viewer.on('scenechange', id => {
+    currentId = id;
+    const scene = tour.scenes[id];
+    if (!scene) return;
+    document.getElementById('roomLabel').textContent = scene.title;
+    document.querySelectorAll('.rm-chip').forEach(c =>
+      c.classList.toggle('active', c.dataset.id === id)
+    );
+  });
+
+  // Show HUD once loaded
+  viewer.on('load', () => {
+    document.getElementById('loadscreen').classList.add('out');
+    document.getElementById('topbar').classList.add('show');
+    document.getElementById('roommap').classList.add('show');
+    buildRoomMap(tour);
+    document.getElementById('roomLabel').textContent = tour.scenes[firstId]?.title || '';
+    document.getElementById('propMeta').textContent = tour.property?.meta || tour.property?.name || '';
+    setTimeout(() => document.getElementById('hint').classList.add('gone'), 4000);
+  });
+}
+
+// ── Room map strip ────────────────────────────────────────
+function buildRoomMap(tour) {
+  const el = document.getElementById('roommap');
+  el.innerHTML = '';
+  Object.entries(tour.scenes).forEach(([id, s], i) => {
+    if (i > 0) {
+      const div = document.createElement('div');
+      div.className = 'rm-div';
+      el.appendChild(div);
+    }
+    const chip = document.createElement('div');
+    chip.className = 'rm-chip' + (i === 0 ? ' active' : '');
+    chip.dataset.id = id;
+    chip.textContent = s.title;
+    chip.onclick = () => goToScene(id);
+    el.appendChild(chip);
+  });
+}
+
+// ── File upload ───────────────────────────────────────────
+function onFiles(e) {
+  const files = Array.from(e.target.files);
+  if (!files.length) return;
+
+  const NAMES = ["Living Room","Kitchen","Bedroom","Bathroom","Balcony","Study","Dining"];
+  const ids   = files.map((_, i) => `room_${i}`);
+
+  const tour = {
+    property: { name: "Property Tour", meta: "" },
+    scenes: {}
+  };
+
+  files.forEach((file, i) => {
+    const raw  = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+    const title = raw.length > 3 ? raw : (NAMES[i] || `Room ${i + 1}`);
+    const url  = URL.createObjectURL(file);
+
+    // Auto-wire hotspots: forward to next, back to prev
+    const hotspots = [];
+    if (i < files.length - 1)
+      hotspots.push({ pitch: -15, yaw: 0,   toScene: ids[i+1], label: `${NAMES[i+1]||'Next'} →` });
+    if (i > 0)
+      hotspots.push({ pitch: -15, yaw: 180, toScene: ids[i-1], label: `← ${NAMES[i-1]||'Back'}` });
+
+    tour.scenes[ids[i]] = { title, panorama: url, hotspots };
+  });
+
+  launch(tour);
+}
+
+function loadDemo() { launch(DEMO_TOUR); }
+
+// ── Initial splash ────────────────────────────────────────
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loadscreen').classList.add('out'), 1200);
+});
+</script>
+</body>
+</html>
