@@ -226,6 +226,18 @@ html, body {
   gap: 8px;
   flex-wrap: wrap;
 }
+.select-btn {
+  min-width: 150px;
+}
+.hotspot-hint {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #4b5563;
+}
+.hotspot-hint.editing {
+  color: #065f46;
+  font-weight: 600;
+}
 .sidebar {
   padding: 14px;
 }
@@ -369,6 +381,9 @@ html, body {
 }
 .hidden-file-input {
   display: none;
+}
+.is-hidden {
+  display: none !important;
 }
 .footer {
   margin-top: 24px;

@@ -68,10 +68,15 @@
         <div class="viewer-foot">
           <div id="roommap"></div>
           <div class="viewer-tools">
-            <button class="btn" id="prevSceneBtn">Previous Room</button>
-            <button class="btn" id="nextSceneBtn">Next Room</button>
+            <button class="btn is-hidden" id="prevSceneBtn">Previous Room</button>
+            <button class="btn is-hidden" id="nextSceneBtn">Next Room</button>
+            <select id="hotspotTargetSelect" class="btn select-btn is-hidden" aria-label="Select hotspot target room"></select>
+            <button class="btn is-hidden" id="hotspotEditBtn">Place Door Link</button>
+            <button class="btn is-hidden" id="clearSceneHotspotsBtn">Clear Scene Links</button>
+            <button class="btn is-hidden" id="copyHotspotsBtn">Copy Hotspot JSON</button>
             <input type="file" id="fileIn" class="hidden-file-input" accept="image/*" multiple>
           </div>
+          <div id="hotspotHint" class="hotspot-hint is-hidden">Hotspot editor: select target room, click "Place Door Link", then click exact doorway in the 360 view.</div>
         </div>
       </section>
 
