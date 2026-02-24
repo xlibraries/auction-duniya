@@ -1,1 +1,12 @@
-resources/
+node_modules/
+.next/
+out/
+.env*
+!.env.example
+.DS_Store
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+tsconfig.tsbuildinfo
