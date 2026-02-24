@@ -1,5 +1,5 @@
 import { CheckCircleIcon, GavelStepIcon, HomeStepIcon, ShieldStepIcon } from "@/components/icons/AppIcons";
-import type { AuctionDetailData, FooterColumn, HowStep, NavLink, PropertyCardData, TrustBadge } from "@/lib/types";
+import type { AuctionDetailData, AuctionListingData, FooterColumn, HowStep, NavLink, PropertyCardData, TrustBadge } from "@/lib/types";
 
 export const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
@@ -124,3 +124,87 @@ export const AUCTION_DETAILS: Record<string, AuctionDetailData> = {
     mapPreview: "/images/Hall.jpg",
   },
 };
+
+export const AUCTIONS_LISTING: AuctionListingData[] = [
+  {
+    id: "ad-433",
+    title: "Luxury Villa with Pool",
+    location: "Basavanagudi, Bangalore",
+    image: "/images/Hall.jpg",
+    status: "live",
+    countdownLabel: "Ends in 02h : 15m : 30s",
+    reservePrice: 25000000,
+    tags: [
+      { id: "bhk", label: "4 BHK" },
+      { id: "area", label: "3500 Sq.Ft" },
+      { id: "type", label: "Freehold" },
+    ],
+  },
+  {
+    id: "ad-441",
+    title: "3BHK High-Rise Apt",
+    location: "Whitefield, Bangalore",
+    image: "/images/kitchen.jpg",
+    status: "upcoming",
+    countdownLabel: "Starts in 2 Days",
+    reservePrice: 8500000,
+    tags: [
+      { id: "bhk", label: "3 BHK" },
+      { id: "area", label: "1850 Sq.Ft" },
+      { id: "type", label: "Semi-Furnished" },
+    ],
+  },
+  {
+    id: "ad-448",
+    title: "Prime Office Space",
+    location: "Koramangala, Bangalore",
+    image: "/images/Myrpom.jpg",
+    status: "hot",
+    countdownLabel: "Ends in 14h : 30m",
+    reservePrice: 42000000,
+    tags: [
+      { id: "type", label: "Office" },
+      { id: "area", label: "4500 Sq.Ft" },
+      { id: "zone", label: "Corner Plot" },
+    ],
+  },
+  {
+    id: "ad-451",
+    title: "Industrial Plot Phase 2",
+    location: "Peenya, Bangalore",
+    status: "verified",
+    countdownLabel: "Oct 26, 10:00 AM",
+    reservePrice: 18000000,
+    tags: [
+      { id: "kind", label: "Industrial" },
+      { id: "area", label: "5000 Sq.Ft" },
+      { id: "zone", label: "Zone A" },
+    ],
+  },
+  {
+    id: "ad-452",
+    title: "Duplex Penthouse",
+    location: "Indiranagar, Bangalore",
+    status: "verified",
+    countdownLabel: "Oct 28, 2:00 PM",
+    reservePrice: 56000000,
+    tags: [
+      { id: "bhk", label: "4 BHK" },
+      { id: "area", label: "3200 Sq.Ft" },
+      { id: "type", label: "Luxury" },
+    ],
+  },
+  {
+    id: "ad-453",
+    title: "Retail Shop Space",
+    location: "Jayanagar, Bangalore",
+    status: "verified",
+    countdownLabel: "Nov 01, 11:30 AM",
+    reservePrice: 4500000,
+    tags: [
+      { id: "kind", label: "Shop" },
+      { id: "area", label: "900 Sq.Ft" },
+      { id: "type", label: "Ground Floor" },
+    ],
+  },
+];

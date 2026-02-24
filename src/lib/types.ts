@@ -84,3 +84,19 @@ export type AuctionDetailData = {
   };
   mapPreview: string;
 };
+
+export type AuctionListingTag = {
+  id: string;
+  label: string;
+};
+
+export type AuctionListingData = {
+  id: string;
+  title: string;
+  location: string;
+  image?: string;
+  status: PropertyStatus;
+  countdownLabel: string;
+  reservePrice: number;
+  tags: AuctionListingTag[];
+};
