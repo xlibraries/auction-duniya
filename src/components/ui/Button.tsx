@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
 import { cn } from "@/lib/utils";
 
-type ButtonVariant = "primary" | "ghost" | "outline" | "dark";
+type ButtonVariant = "primary" | "ghost" | "outline" | "dark" | "outline-white";
 
 type ButtonProps = PropsWithChildren<
   {
