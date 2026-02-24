@@ -44,9 +44,16 @@ export function Footer({ variant = "full" }: FooterProps) {
     return (
       <footer className="ad-footer ad-footer--slim">
         <div className="container ad-footer__slim-row">
-          <span>Auction Dunia</span>
-          <span>© 2026 Auction Dunia</span>
-          <span>Privacy · Terms · Contact</span>
+          <div className="ad-logo ad-logo--slim">
+            <span className="ad-logo__badge"><BrandIcon /></span>
+            <span className="ad-logo__text">Auction Dunia</span>
+          </div>
+          <span>© 2026 Auction Dunia. Your trusted bank auction platform.</span>
+          <div className="ad-footer__slim-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Contact</a>
+          </div>
         </div>
       </footer>
     );

@@ -1,4 +1,4 @@
-import type { FooterColumn, HowStep, NavLink, PropertyCardData, TrustBadge } from "@/lib/types";
+import type { AuctionDetailData, FooterColumn, HowStep, NavLink, PropertyCardData, TrustBadge } from "@/lib/types";
 
 const CheckCircleIcon = () => (
   <svg viewBox="0 0 24 24" width="14" height="14" fill="none" aria-hidden="true">
@@ -107,3 +107,48 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
     links: ["Bengaluru, Karnataka 560030", "7019773792", "info@auctiondunia.com"],
   },
 ];
+
+export const AUCTION_DETAILS: Record<string, AuctionDetailData> = {
+  "ad-433": {
+    id: "ad-433",
+    title: "Emerald Heights Villa, Sector 45",
+    breadcrumbLabel: "Emerald Heights Villa",
+    bank: "State Bank of India",
+    location: "Gurgaon, Haryana",
+    subLocation: "Near City Center",
+    highestBid: "₹ 3.92 Cr",
+    aboveReserve: "+ ₹7 Lakhs above reserve",
+    countdown: {
+      hrs: "02",
+      min: "45",
+      sec: "12",
+    },
+    images: ["/images/Hall.jpg", "/images/kitchen.jpg", "/images/Myrpom.jpg"],
+    overview: [
+      { id: "area", label: "Total Area", value: "2,450 sq.ft" },
+      { id: "type", label: "Property Type", value: "4BHK Villa" },
+      { id: "possession", label: "Possession", value: "Physical" },
+      { id: "verification", label: "Verification", value: "SARFAESI" },
+    ],
+    description:
+      "Prime residential villa located in the heart of Gurgaon. This property is part of the prestigious Emerald Heights community. Featuring 4 spacious bedrooms, a private garden, and modern amenities. The property is currently under the physical possession of State Bank of India under the SARFAESI Act. Excellent connectivity to NH-8 and rapid metro.",
+    stats: [
+      { id: "reserve", label: "Reserve Price", value: "₹ 3.85 Cr", tone: "green" },
+      { id: "increment", label: "Increment Value", value: "₹ 1,00,000", tone: "blue" },
+      { id: "bidders", label: "Active Bidders", value: "14 People", tone: "orange" },
+    ],
+    bidActivityLabel: "Last updated 2 mins ago",
+    bidActivityNote: "Activity is high! 5 new bids in the last hour.",
+    legalDocuments: [
+      { id: "deed", title: "Property Title Deed", meta: "PDF • 2.4 MB", type: "deed" },
+      { id: "notice", title: "Auction Notice", meta: "PDF • 1.1 MB", type: "notice" },
+      { id: "terms", title: "Terms & Conditions", meta: "PDF • 850 KB", type: "terms" },
+    ],
+    officer: {
+      name: "Rajesh Kumar",
+      role: "Authorized Officer, SBI",
+      avatar: "/images/kitchen.jpg",
+    },
+    mapPreview: "/images/Hall.jpg",
+  },
+};
