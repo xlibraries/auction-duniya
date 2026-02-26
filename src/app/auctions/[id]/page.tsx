@@ -174,7 +174,13 @@ export default async function AuctionDetailPage({ params }: { params: Promise<{ 
               </article>
 
               <article className="ad-side-map">
-                <Image src={property.mapPreview} alt="Property map preview" fill className="ad-side-map__image" sizes="(max-width: 1024px) 100vw, 33vw" />
+                <iframe
+                  title="AD-433 location map"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  src="https://www.google.com/maps?output=embed&q=12.8974253,77.6528988"
+                  className="ad-side-map__iframe"
+                />
                 <button><MapIcon /> View on Map</button>
               </article>
             </aside>
