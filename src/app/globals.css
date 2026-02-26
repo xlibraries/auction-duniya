@@ -1463,6 +1463,54 @@ main {
   object-fit: cover;
 }
 
+#viewerWrap {
+  position: absolute;
+  inset: 0;
+}
+
+#pano {
+  width: 100%;
+  height: 100%;
+  background: #0f172a;
+}
+
+#viewerWrap .pnlm-container {
+  width: 100%;
+  height: 100%;
+}
+
+#viewerWrap .pnlm-about-msg {
+  display: none;
+}
+
+#viewerWrap .pnlm-controls-container,
+#viewerWrap .pnlm-compass {
+  display: none !important;
+}
+
+.viewer-overlay {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.viewer-overlay .scene-name,
+.viewer-overlay .counter {
+  border-radius: 999px;
+  min-height: 30px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  background: rgba(17, 24, 39, 0.56);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .ad-gallery-badge {
   position: absolute;
   left: 18px;

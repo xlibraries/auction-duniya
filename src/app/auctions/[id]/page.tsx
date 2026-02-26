@@ -26,6 +26,7 @@ import {
 } from "@/components/icons/AppIcons";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { ImmersiveViewer } from "@/components/property/ImmersiveViewer";
 import { AUCTION_DETAILS } from "@/lib/constants";
 
 export default async function AuctionDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -52,7 +53,7 @@ export default async function AuctionDetailPage({ params }: { params: Promise<{ 
           <div className="ad-detail-grid">
             <section className="ad-detail-main">
               <article className="ad-gallery-card">
-                <Image src={property.images[0]} alt={property.title} fill className="ad-gallery-image" sizes="(max-width: 1024px) 100vw, 66vw" />
+                <ImmersiveViewer images={property.images} />
                 <span className="ad-gallery-badge">
                   <ImmersiveIcon />
                   Immersive Tour Enabled
