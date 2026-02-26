@@ -181,7 +181,6 @@ export default async function AuctionDetailPage({ params }: { params: Promise<{ 
                   src="https://www.google.com/maps?output=embed&q=12.8974253,77.6528988"
                   className="ad-side-map__iframe"
                 />
-                <button><MapIcon /> View on Map</button>
               </article>
             </aside>
           </div>
