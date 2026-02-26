@@ -51,9 +51,9 @@ export function Navbar() {
             <button className="ad-nav__icon" aria-label="Search">
               <SearchIcon size={18} />
             </button>
-            <button className="ad-login-btn">
+            <Link href="/login" className="ad-login-btn" onClick={() => setOpen(false)}>
               <UserIcon size={16} /> Login
-            </button>
+            </Link>
           </div>
         </div>
       </div>
