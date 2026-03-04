@@ -2,16 +2,26 @@
   "name": "auction-duniya",
   "version": "1.0.0",
   "private": true,
-  "description": "AuctionDunia",
+  "description": "AuctionDunia Next.js app",
   "scripts": {
-    "start": "npx http-server . -p 5173 -c-1",
-    "dev": "npm run start"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
   },
-  "keywords": [
-    "auction",
-    "property",
-    "pannellum",
-    "360-viewer"
-  ],
-  "license": "UNLICENSED"
+  "dependencies": {
+    "next": "15.2.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.13.8",
+    "@types/react": "19.0.10",
+    "@types/react-dom": "19.0.4",
+    "eslint": "9.21.0",
+    "eslint-config-next": "15.2.0",
+    "typescript": "5.7.3"
+  },
+  "packageManager": "pnpm@9.15.4"
 }
